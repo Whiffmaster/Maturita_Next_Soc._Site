@@ -1,0 +1,25 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "vendor-chunks/@nextui-org+use-is-mounted@2.0.4_react@18.2.0";
+exports.ids = ["vendor-chunks/@nextui-org+use-is-mounted@2.0.4_react@18.2.0"];
+exports.modules = {
+
+/***/ "(ssr)/../node_modules/.pnpm/@nextui-org+use-is-mounted@2.0.4_react@18.2.0/node_modules/@nextui-org/use-is-mounted/dist/index.mjs":
+/*!**********************************************************************************************************************************!*\
+  !*** ../node_modules/.pnpm/@nextui-org+use-is-mounted@2.0.4_react@18.2.0/node_modules/@nextui-org/use-is-mounted/dist/index.mjs ***!
+  \**********************************************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   useIsMounted: () => (/* binding */ useIsMounted)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"(ssr)/../node_modules/.pnpm/next@14.1.2_react-dom@18.2.0_react@18.2.0/node_modules/next/dist/server/future/route-modules/app-page/vendored/ssr/react.js\");\n// src/index.ts\n\nfunction useIsMounted(props = {}) {\n  const { rerender = false, delay = 0 } = props;\n  const isMountedRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(false);\n  const [isMounted, setIsMounted] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);\n  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {\n    isMountedRef.current = true;\n    let timer = null;\n    if (rerender) {\n      if (delay > 0) {\n        timer = setTimeout(() => {\n          setIsMounted(true);\n        }, delay);\n      } else {\n        setIsMounted(true);\n      }\n    }\n    return () => {\n      isMountedRef.current = false;\n      if (rerender) {\n        setIsMounted(false);\n      }\n      if (timer) {\n        clearTimeout(timer);\n      }\n    };\n  }, [rerender]);\n  return [(0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(() => isMountedRef.current, []), isMounted];\n}\n\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHNzcikvLi4vbm9kZV9tb2R1bGVzLy5wbnBtL0BuZXh0dWktb3JnK3VzZS1pcy1tb3VudGVkQDIuMC40X3JlYWN0QDE4LjIuMC9ub2RlX21vZHVsZXMvQG5leHR1aS1vcmcvdXNlLWlzLW1vdW50ZWQvZGlzdC9pbmRleC5tanMiLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQTtBQUNpRTtBQUNqRSxnQ0FBZ0M7QUFDaEMsVUFBVSw4QkFBOEI7QUFDeEMsdUJBQXVCLDZDQUFNO0FBQzdCLG9DQUFvQywrQ0FBUTtBQUM1QyxFQUFFLGdEQUFTO0FBQ1g7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0EsU0FBUztBQUNULFFBQVE7QUFDUjtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxHQUFHO0FBQ0gsVUFBVSxrREFBVztBQUNyQjtBQUdFIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vLy4uL25vZGVfbW9kdWxlcy8ucG5wbS9AbmV4dHVpLW9yZyt1c2UtaXMtbW91bnRlZEAyLjAuNF9yZWFjdEAxOC4yLjAvbm9kZV9tb2R1bGVzL0BuZXh0dWktb3JnL3VzZS1pcy1tb3VudGVkL2Rpc3QvaW5kZXgubWpzP2I5OWEiXSwic291cmNlc0NvbnRlbnQiOlsiLy8gc3JjL2luZGV4LnRzXG5pbXBvcnQgeyB1c2VDYWxsYmFjaywgdXNlRWZmZWN0LCB1c2VSZWYsIHVzZVN0YXRlIH0gZnJvbSBcInJlYWN0XCI7XG5mdW5jdGlvbiB1c2VJc01vdW50ZWQocHJvcHMgPSB7fSkge1xuICBjb25zdCB7IHJlcmVuZGVyID0gZmFsc2UsIGRlbGF5ID0gMCB9ID0gcHJvcHM7XG4gIGNvbnN0IGlzTW91bnRlZFJlZiA9IHVzZVJlZihmYWxzZSk7XG4gIGNvbnN0IFtpc01vdW50ZWQsIHNldElzTW91bnRlZF0gPSB1c2VTdGF0ZShmYWxzZSk7XG4gIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgaXNNb3VudGVkUmVmLmN1cnJlbnQgPSB0cnVlO1xuICAgIGxldCB0aW1lciA9IG51bGw7XG4gICAgaWYgKHJlcmVuZGVyKSB7XG4gICAgICBpZiAoZGVsYXkgPiAwKSB7XG4gICAgICAgIHRpbWVyID0gc2V0VGltZW91dCgoKSA9PiB7XG4gICAgICAgICAgc2V0SXNNb3VudGVkKHRydWUpO1xuICAgICAgICB9LCBkZWxheSk7XG4gICAgICB9IGVsc2Uge1xuICAgICAgICBzZXRJc01vdW50ZWQodHJ1ZSk7XG4gICAgICB9XG4gICAgfVxuICAgIHJldHVybiAoKSA9PiB7XG4gICAgICBpc01vdW50ZWRSZWYuY3VycmVudCA9IGZhbHNlO1xuICAgICAgaWYgKHJlcmVuZGVyKSB7XG4gICAgICAgIHNldElzTW91bnRlZChmYWxzZSk7XG4gICAgICB9XG4gICAgICBpZiAodGltZXIpIHtcbiAgICAgICAgY2xlYXJUaW1lb3V0KHRpbWVyKTtcbiAgICAgIH1cbiAgICB9O1xuICB9LCBbcmVyZW5kZXJdKTtcbiAgcmV0dXJuIFt1c2VDYWxsYmFjaygoKSA9PiBpc01vdW50ZWRSZWYuY3VycmVudCwgW10pLCBpc01vdW50ZWRdO1xufVxuZXhwb3J0IHtcbiAgdXNlSXNNb3VudGVkXG59O1xuIl0sIm5hbWVzIjpbXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(ssr)/../node_modules/.pnpm/@nextui-org+use-is-mounted@2.0.4_react@18.2.0/node_modules/@nextui-org/use-is-mounted/dist/index.mjs\n");
+
+/***/ })
+
+};
+;
