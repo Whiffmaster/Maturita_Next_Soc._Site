@@ -8,7 +8,7 @@ import {Adapter} from "next-auth/adapters";
 import User from "../../../../models/User";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
-import {log} from "next/dist/server/typescript/utils";
+import {adapter} from "next/dist/server/web/adapter";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -19,44 +19,62 @@ declare module "next-auth" {
 }
 
 
-  const handler = NextAuth({
-    adapter: MongoDBAdapter(clientPromise) as Adapter,
-    pages: {
-      signIn: '/auth/signin'
-    },
-    callbacks: {
-      session: ({session, user}) => ({
+const handler = NextAuth({
+  adapter: <Adapter>MongoDBAdapter(clientPromise),
+  pages: {
+    signIn: '/auth/signin'
+  },
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    session: async ({session, token, user}) => {
+
+      if (session?.user) session.user.id = token.sub;
+      return ({
         ...session,
         user: {
           ...session.user,
-          id: user.id,
+          id: user?.id || token.id,
         },
-      }),
+      })
     },
-    providers: [
-      CredentialsProvider({
-        credentials: {
-          email: {label: "email", type: "text"},
-          password: {label: "password", type: "password"},
-        },
-        async authorize(credentials, req) {
-          const user = await User.findOne({email: credentials.email});
-          log(user)
-          if (user) {
-            const isMatch = await bcrypt.compare(credentials.password, user.password);
-            if (isMatch) {
-              return user
-            }
-          }
-          return {ok: false, error: "Invalid credentials"};
-        },
-      }),
-      Discord({
-        clientId: "1214646824049311805",
-        clientSecret: "CdHkv4zVynHgIJczBLR6bzPItCFLbwc5",
-        authorization: "https://discord.com/oauth2/authorize?client_id=1214646824049311805&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&scope=identify+email"
-      }),
-    ],
-  });
+    jwt: async ({token, user}) => {
+      if (user) {
+        token.id = user.id;
+      }
+      //TODO: Send email
+      //await Email.sendRegistrationMail((data.token.email || data.profile?.email || data.user?.email)!);
 
-  export {handler as GET, handler as POST};
+
+      return token;
+    },
+  },
+  providers: [
+    CredentialsProvider({
+      credentials: {
+        email: {label: "email", type: "text"},
+        password: {label: "password", type: "password"},
+      },
+      authorize: async (credentials) => {
+        await mongoose.connect(process.env.MONGODB_URI);
+        const user = await User.findOne({email: credentials.email});
+        if (user) {
+          const isMatch = await bcrypt.compare(credentials.password, user.password);
+          if (isMatch) {
+            const userSession = {id: user._id.toString(), name: user.name, email: user.email, image: user.image}
+            return userSession
+          }
+        }
+        return null
+      },
+    }),
+    Discord({
+      clientId: "1214646824049311805",
+      clientSecret: "CdHkv4zVynHgIJczBLR6bzPItCFLbwc5",
+      authorization: "https://discord.com/oauth2/authorize?client_id=1214646824049311805&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fdiscord&scope=identify+email"
+    }),
+  ],
+});
+
+export {handler as GET, handler as POST};

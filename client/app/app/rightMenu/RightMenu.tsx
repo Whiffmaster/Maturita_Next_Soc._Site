@@ -13,7 +13,7 @@ const RightMenu = (props: { children: JSX.Element[] }) => {
 
   return (
     <div
-      className="relative w-[20vw] h-[85vh] my-auto max-w-[300px] items-center gap-1 self-center flex flex-col border-l border-l-white/60 py-5 text-white">
+      className="relative max-sm:hidden w-[20vw] h-[85vh] my-auto max-w-[300px] items-center gap-1 self-center flex flex-col border-l border-l-white/60 py-5 text-white">
       <div className="w-full h-full flex flex-col items-center">
         {!active ? props.children.map((child) => {
             return (

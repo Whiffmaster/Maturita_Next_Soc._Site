@@ -7,44 +7,40 @@ import {Avatar, AvatarIcon, Popover, PopoverContent, PopoverTrigger} from "@next
 import React from "react";
 import {IoSettingsOutline} from "react-icons/io5";
 
-const LeftMenu = (props: {
+const LeftMenuMobile = (props: {
   active?: string,
   setActive: any,
   routes: Map<string, { component: JSX.Element, icon?: JSX.Element }>
 }) => {
   const {user, setUser} = useUserContext()
   const {data} = useSession()
-  const nav = useRouter()
 
 
   return (
     <div
-      className="relative max-sm:hidden w-[20vw] h-[85vh] my-auto  max-w-[300px] items-center gap-1 self-center flex flex-col border-r border-r-white/60 py-5 text-white">
+      className="relative sm:hidden w-full h-[60px] items-center gap-1 self-center justify-around flex flex-row border-t border-t-white/60 text-white">
 
       {props.active && Array.from(props.routes.values()).map((child) => {
-        if (!child.icon) return undefined
+          if (!child.icon) return undefined
           return (
             <div key={child.component.key}
-                 className={`w-[80%] min-w-[210px] rounded-md cursor-pointer h-[50px] text-[23px] transition flex flex-row hover:bg-white/5`}
+                 className={`w-[50px] h-[50px] text-[23px] transition flex flex-row`}
                  onClick={() => props.setActive(child.component.key)}>
-              <div className="ml-10 -mr-5 w-1/3 h-full flex flex-col justify-center">
+              <div className="w-fit h-full mx-auto flex flex-col justify-center">
                 {child.icon}
-              </div>
-              <div className="w-2/3 h-full flex flex-col justify-center">
-                <h2
-                  className={child.component.key == props.active ? " font-bold text-grad" : ""}>{child.component.key}</h2>
               </div>
             </div>
           )
         }
       )}
+
       <Popover placement={"top"} className={"w-full"}>
         <PopoverTrigger>
 
           <div
-            className="absolute min-w-[190px] bottom-0 hover:bg-white/5 transition cursor-pointer w-[70%] self-center h-fit rounded-xl p-2 flex flex-row justify-around">
-
+            className="rounded-xl p-2 flex flex-row justify-around">
             <Avatar
+              size={"sm"}
               icon={<AvatarIcon/>}
               src={data.user.image || ""}
               classNames={{
@@ -52,22 +48,20 @@ const LeftMenu = (props: {
                 icon: "text-black/70"
               }}
             />
-            <h2 className="self-center font-semibold text-xl">{user.name || ""}</h2>
-
           </div>
         </PopoverTrigger>
-        <PopoverContent className={"bg-white/5 py-3"}>
-          <div className={"flex flex-col gap-1 items-center w-[12vw]"}>
+        <PopoverContent className={" py-3"}>
+          <div className={"flex flex-col gap-1 items-center w-[150px]"}>
             <div  onClick={() => {
               props.setActive("Settings")
             }}
-              className={"flex items-center w-[80%] h-[40px] rounded-md justify-around hover:bg-white/10 cursor-pointer"}>
+                  className={"flex items-center w-[80%] h-[40px] rounded-md justify-around"}>
               <IoSettingsOutline className={"w-1/3"}
                                  size={25}/>
               <h2 className={"w-2/3 text-medium"}>{"Settings"}</h2>
             </div>
             <div onClick={() => signOut()}
-                 className={"flex items-center w-[80%] h-[40px] rounded-md justify-around hover:bg-white/10 cursor-pointer"}>
+                 className={"flex items-center w-[80%] h-[40px] rounded-md justify-around"}>
               <CgLogOut className={"w-1/3"} size={25}/>
               <h2 className={"w-2/3 text-medium"}>{"Log out"}</h2>
             </div>
@@ -79,4 +73,4 @@ const LeftMenu = (props: {
   )
 }
 
-export default LeftMenu
+export default LeftMenuMobile

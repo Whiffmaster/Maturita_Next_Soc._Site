@@ -54,6 +54,7 @@ const SearchContent = (props: { setActive: any, search: string, setSearch: any }
       <div className="flex row h-full w-full">
         <div className="relative flex flex-col h-full w-full mx-auto">
           <Input
+            className={"w-[90%] mx-auto py-4"}
             placeholder="for users, or #Tags"
             label="Search"
             variant="bordered"
@@ -63,6 +64,7 @@ const SearchContent = (props: { setActive: any, search: string, setSearch: any }
             value={value} onChange={(e) => {
             setValue(e.target.value)
           }}/>
+          <Button className={"sm:hidden bg-grad w-[70%] mx-auto"} onClick={()=>handleSearch()}>Search</Button>
           {memory.length > 0 ? memory.reverse().slice(0, 5).map((value, index) =>
             <div
               key={index}

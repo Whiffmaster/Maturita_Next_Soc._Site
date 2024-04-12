@@ -9,28 +9,36 @@ import {
   Textarea, useDisclosure
 } from "@nextui-org/react";
 import {FaRegHeart} from "react-icons/fa";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useUserContext} from "../../utils/UserContext";
-import {createComment, likeComment} from "../../actions";
+import {createComment, likeComment, unlikeComment} from "../../actions";
 import {Posts} from "../../../models/Post";
 import {ObjectId} from "mongoose";
+import {Comments} from "../../../models/Comment";
 
-const CommentPopover = ({isOpen, onOpenChange, post, setFeed} ) => {
+const CommentPopover = ({isOpen, onOpenChange, post, setFeed}) => {
   const {user, setUser} = useUserContext()
   const [commentContent, setCommentContent] = useState<string>("")
-  const [comments, setComments]= useState([])
+  const [comments, setComments] = useState([])
 
+
+  useEffect(() => {
+    console.log(post.comments)
+  }, [post.comments]);
 
 
   const sentComment = () => {
     createComment(commentContent, user._id, post._id).then((res) => {
-      console.log(res)
       setCommentContent("")
       setFeed((feed: Posts[]) => {
         let newFeed = feed
         newFeed.map((p: Posts) => {
           if (p._id === post._id) {
-            (p.comments as { author: any,likes:string[], content: any }[]).push({author: user,likes:[], content: commentContent})
+            (p.comments as { author: any, likes: string[], content: any }[]).push({
+              author: user,
+              likes: [],
+              content: commentContent
+            })
           }
         })
         return newFeed
@@ -40,26 +48,33 @@ const CommentPopover = ({isOpen, onOpenChange, post, setFeed} ) => {
     })
   }
   const handleLikeComment = (comment) => {
-    console.log("like")
-    likeComment(comment, user._id).then(
-      (res) => {
-        setFeed((feed: Posts[]) => {
-          let newFeed = feed
-          newFeed.map((p: Posts) => {
-            if (p._id === post._id) {
-              (p.comments as ObjectId[]).push(user._id)
-            }
-          })
-          return newFeed
-        })
+    const updateCommentLikes = (comments, updateFn) => comments.map(c => {
+      if (c._id === comment._id) {
+        return { ...c, likes: updateFn(c.likes) };
       }
-    ).catch((err) => {
-        console.log(err)
-      }
-    )
-  }
+      return c;
+    });
 
-  return(
+    const updateFn = comment.likes.includes(user._id) ?
+      (likes) => likes.filter(id => id !== user._id) :
+      (likes) => [...likes, user._id];
+
+    const action = comment.likes.includes(user._id) ? unlikeComment : likeComment;
+
+    action(comment._id, user._id).then(() => {
+      setFeed(feed => feed.map(p => {
+        if (p._id === post._id) {
+          return { ...p, comments: updateCommentLikes(p.comments, updateFn) };
+        }
+        return p;
+      }));
+    }).catch((err) => {
+      console.log(err);
+    });
+  };
+
+
+  return (
     <Modal className={"h-[600px]"} isOpen={isOpen} onOpenChange={onOpenChange}>
       <ModalContent>
         {(onClose) => (
@@ -91,7 +106,9 @@ const CommentPopover = ({isOpen, onOpenChange, post, setFeed} ) => {
                         </div>
                         <div
                           className={`absolute inset-y-0 right-0 flex items-center pr-3 opacity-0 group-hover:opacity-100`}>
-                          <FaRegHeart className={`cursor-pointer ${comment.likes.includes(user._id)? "text-red-600":""} ${comment.author._id== user._id? "hidden":""}`} onClick={() => handleLikeComment(comment._id)}/>
+                          <FaRegHeart
+                            className={`cursor-pointer ${comment.likes.includes(user._id) ? "text-red-600" : ""} ${comment.author._id == user._id ? "hidden" : ""}`}
+                            onClick={() => handleLikeComment(comment)}/>
                         </div>
                       </div>
                     ))}

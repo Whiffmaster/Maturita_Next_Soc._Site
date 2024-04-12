@@ -16,16 +16,16 @@ export const Feed = ({setActive}: { setActive: any }) => {
 
   const loadMore = () => {
     getFeed(data.user.id).then((r: Posts[]) => {
-      setFeed(([...feed, ...r]))
+      setFeed(feed => ([...feed, ...r] as Posts[]))
     })
 
   }
 
 
   useEffect(() => {
-    if (feed[0]._id == -1) {
+    if (feed[0]._id as undefined as number == -1) {
       getFeed(data.user.id).then((r: Posts[]) => {
-        console.log(r)
+        if (r.length == 0) return
         setFeed(r)
       })
     }
@@ -38,10 +38,10 @@ export const Feed = ({setActive}: { setActive: any }) => {
 
   return (
     <ScrollShadow hideScrollBar
-                  className={`w-full h-full flex ${feed && feed[0]._id != -1  ? "flex-col" : "items-center"}`}>
-      {feed && feed[0]._id != -1 ?
+                  className={`w-full h-full flex ${feed && feed[0]._id as undefined as number != -1 ? "flex-col" : "items-center"}`}>
+      {feed && feed[0]._id as undefined as number != -1 ?
         <div className="w-full h-fit pt-10">
-          {feed.map((post , index: number) => {
+          {feed.map((post, index: number) => {
             return <FeedPost key={index} setFeed={setFeed} post={post} setActive={setActive}/>
           })}
           <button

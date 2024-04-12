@@ -1,62 +1,92 @@
 import {Users} from "../../models/User";
 import {ObjectId} from "mongodb";
+import React from "react";
+import {Conversations} from "../../models/Conversation";
+import {Messages} from "../../models/Message";
 
-const handleEvent = ({type, payload}: { type: string, payload: any }, setUser: any, setActiveFriends: any) => {
+const handleEvent = ({type, data}: { type: string, data: any }, setUser: any, setActiveFriends: any, setChat:any) => {
 
   const handleUserOnline = () => {
     setActiveFriends((prev: string[]) => {
-      if (prev.includes(payload)) return prev;
-      return [...prev, payload]
+      if (prev.includes(data)) return prev;
+      return [...prev, data]
     })
 
-    console.log(payload + " is online");
+    console.log(data + " is online");
   }
 
   const handleUserOffline = () => {
     setActiveFriends((prev: string[]) => {
-      return prev.filter((i: string) => i !== payload)
+      return prev.filter((i: string) => i !== data)
     })
-    console.log(payload + " is offline");
+    console.log(data + " is offline");
   }
   const handleFriendRequest = () => {
-    console.log(payload + " sent you a friend request");
+    console.log(data + " sent you a friend request");
     setUser((prev: any) => {
-      if (prev.invites.includes(payload)) return prev;
+      if (prev.invites.includes(data)) return prev;
       return {
         ...prev,
-        invites: [...prev.invites, payload]
+        invites: [...prev.invites, data]
       }
     })
   }
 
   const handleFriendRequestAccepted = () => {
-    console.log(payload.username + " accepted your friend request");
+    console.log(data.username + " accepted your friend request");
     setUser((prev: Users) => {
-      if ((prev.invitesSent as ObjectId[]).includes(payload)) return prev;
+      if ((prev.invitesSent as ObjectId[]).includes(data)) return prev;
       return {
         ...prev,
-        invitesSent: prev.invitesSent.filter((i: string) => i !== payload)
+        invitesSent: prev.invitesSent.filter((i: string) => i !== data)
       }
     })
   }
 
   const handleFriendRequestDeclined = () => {
-    console.log(payload.username + " declined your friend request");
+    console.log(data.username + " declined your friend request");
     setUser((prev: Users) => {
-      if ((prev.invitesSent as ObjectId[]).includes(payload)) return prev;
+      if ((prev.invitesSent as ObjectId[]).includes(data)) return prev;
       return {
         ...prev,
-        invitesSent: prev.invitesSent.filter((i: string) => i !== payload)
+        invitesSent: prev.invitesSent.filter((i: string) => i !== data)
       }
     })
   }
 
   const handleMasaggeReceived = () => {
+    setChat((prev: Conversations[]) => {
+      return prev.map((chat: Conversations) => {
+        if (chat._id == data.conversation) {
+          if ((chat.messages as Messages[]).find((m) => m._id == data.messageID)) return chat
+          const formattedData= {
+            content: data.message,
+            _id: data.messageID,
+            author: data.sender,
+            date: data.date
+          }
 
-
+          return {
+            ...chat,
+            messages: [...chat.messages, formattedData]
+          }
+        }
+        return chat
+      })
+    })
   }
 
+  const handleFriendRequestDeleted = () => {
+    console.log(data.username + " deleted you from their friends");
+    setUser((prev: Users) => {
+      return {
+        ...prev,
+        friends: prev.friends.filter((f: { friend: Users }) => f.friend._id !== data)
+      }
+    })
+  }
 
+  console.log(type, data)
   switch (type) {
     case "USER_ONLINE":
       return handleUserOnline();
@@ -64,10 +94,12 @@ const handleEvent = ({type, payload}: { type: string, payload: any }, setUser: a
       return handleUserOffline();
     case "FRIEND_REQUEST":
       return handleFriendRequest();
-    case "FRIEND_REQUEST_ACCEPTED":
+    case "FRIEND_ACCEPTED":
       return handleFriendRequestAccepted();
-    case "FRIEND_REQUEST_DECLINED":
+    case "FRIEND_DECLINED":
       return handleFriendRequestDeclined();
+    case "FRIEND_DELETE":
+      return handleFriendRequestDeleted();
     case "MESSAGE_RECEIVED":
       return handleMasaggeReceived();
     default:

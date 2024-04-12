@@ -9,12 +9,10 @@ import {useRouter} from "next/navigation";
 import {log} from "next/dist/server/typescript/utils";
 import User from "../../../models/User";
 import {register} from "../../actions";
+import bcrypt from "bcrypt";
 
 const signin = () => {
   const [active, setActive] = useState(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const {status} = useSession();
   const router = useRouter();
 
@@ -26,33 +24,46 @@ const signin = () => {
 
 
   const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     return (
       <>
-        <Input type="email" label="Email" variant="bordered"/>
-        <Input type="password" label="Password" maxLength={50} minLength={8} variant="bordered" className={""}/>
+        <Input type="email" label="Email" variant="bordered" value={email} onValueChange={(e) => setEmail(e)}/>
+        <Input type="password" label="Password" maxLength={50} minLength={8} variant="bordered" value={password}
+               onValueChange={(e) => setPassword(e)}/>
 
         <Button className={"bg-white text-black font-bold text-xl hover:bg-opacity-80"}
-                onClick={() => signIn("credentials", {callbackUrl: "/app"}, {
-                  email,
-                  password
-                }).catch((reason) => log(reason))}>Log In</Button>
+                onClick={() => signIn("credentials", {
+                    callbackUrl: "/app",
+                    email: email,
+                    password: password
+                  }
+                ).catch((reason) => log(reason))}>Log In</Button>
       </>)
   }
   const Register = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
     return (
       <>
-        <Input type="email" label="Email" maxLength={25} minLength={4} variant="bordered" className={""}/>
-        <Input type="text" label="Username" maxLength={12} variant="bordered" className={""}/>
-        <Input type="password" label="Password" maxLength={50} minLength={8} variant="bordered" className={""}/>
+        <Input type="email" label="Email" maxLength={25} minLength={4} variant="bordered" value={email}
+               onValueChange={(e) => setEmail(e)}/>
+        <Input type="text" label="Username" maxLength={12} variant="bordered" className={""} value={username}
+               onValueChange={(e) => setUsername(e)}/>
+        <Input type="password" label="Password" maxLength={50} minLength={8} variant="bordered" value={password}
+               onValueChange={(e) => setPassword(e)}/>
         <Button className={"bg-white text-black font-bold text-xl hover:bg-opacity-80"} onClick={() => {
           register(username, email, password).then((res) => {
+            console.log(res)
             if (res) {
-              signIn("credentials", {callbackUrl: "/app"}, {
-                email,
-                password
-              }).catch((reason) => log(reason))
+              signIn("credentials", {
+                callbackUrl: "/app",
+                email: email,
+                password: password
+              }).catch((reason) => console.log(reason))
             }
-          }).catch((reason) => log(reason))
+          }).catch((reason) => console.log(reason))
         }}>Register</Button>
       </>)
   }

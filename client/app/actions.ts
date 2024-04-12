@@ -6,6 +6,8 @@ import User, {Users} from "../models/User";
 import Post, {Posts} from "../models/Post";
 import Conversation from "../models/Conversation";
 import Comment from "../models/Comment";
+import Message from "../models/Message";
+import bcrypt from "bcrypt";
 
 const getFeed = async (_id: ObjectId | string) => {
   const user = await User.findById(_id).populate("friends.friend", "name image").populate("friends.conversation").exec()
@@ -133,7 +135,8 @@ const sentInvite = async (inviteeID: string, userID: string) => {
 }
 
 const register = async (username: string, email: string, password: string) => {
-  const user = await User.create({name: username, email, password})
+  const hashedPassword = await bcrypt.hash(password, 10)
+  const user = await User.create({name: username, email, password:hashedPassword})
   if (user) {
     return {status: "ok", message: "User created"}
   }
@@ -178,14 +181,36 @@ const likeComment = async (commentID: ObjectId, userID: ObjectId) => {
   const comment = await Comment.findById(commentID).exec()
   const user = await User.findById(userID).exec()
   if (comment && user) {
-    console.log(comment._id, user._id)
     comment.likes.push(user._id)
     await comment.save()
     return {status: "ok", message: "Comment liked"}
   }
 }
 
-const getActiveFriends = async (friends: string[]):Promise<any[]> => {
+const unlikeComment = async (commentID: ObjectId, userID: ObjectId) => {
+  const comment = await Comment.findById(commentID).exec()
+  const user = await User.findById(userID).exec()
+  if (comment && user) {
+    comment.likes = comment.likes.filter((id) => !id.equals(user._id));
+    await comment.save()
+    return {status: "ok", message: "Comment unliked"}
+
+  }
+}
+
+const getConversation = async (conversationID: ObjectId) => {
+  Message
+  const conv = await Conversation.findById(conversationID).populate("members", "name image").populate({
+    path: "messages",
+    options: {limit: 20, sort: {'date': 1}}
+  }).exec()
+  if (conv) {
+    return JSON.parse(JSON.stringify(conv))
+  }
+  throw new Error("Conversation not found")
+}
+
+const getActiveFriends = async (friends: string[]): Promise<any[]> => {
   const res = await fetch("http://localhost:5000/getFriends", {
     method: "POST",
     headers: {
@@ -196,8 +221,46 @@ const getActiveFriends = async (friends: string[]):Promise<any[]> => {
   return await res.json()
 }
 
+const sendMessage = async (message: string, userID: ObjectId, conversationID: string) => {
+  const conv = await Conversation.findById(conversationID).exec()
+  if (conv) {
+    const date = Date.now().toString()
+    const msg = await Message.create({author: userID, content: message, date})
+    conv.messages.push(msg._id)
+    await conv.save()
+    return JSON.parse(JSON.stringify(msg._id))
+  }
+}
+
+const updateSettings = async (userID: ObjectId, data: {
+  name: string,
+  settings: { privacy: Users["settings"]["privacy"] }
+}) => {
+  const user = await User.findById(userID).exec()
+  if (user) {
+    user.name = data.name
+    user.settings.privacy = data.settings.privacy
+    await user.save()
+    return {status: "ok", message: "Settings updated"}
+  }
+}
+
+const removeFriend = async (friendID: string) => {
+  const user = await User.findById(friendID).exec()
+  if (user) {
+    user.friends = user.friends.filter((f) => f.friend != friendID)
+    await user.save()
+    return {status: "ok", message: "Friend removed"}
+  }
+
+}
+
 
 export {
+  removeFriend,
+  unlikeComment,
+  updateSettings,
+  sendMessage,
   getActiveFriends,
   getFeed,
   searchPostsByTag,
@@ -213,5 +276,6 @@ export {
   likePost,
   dislikePost,
   createComment,
-  likeComment
+  likeComment,
+  getConversation
 }

@@ -50,7 +50,7 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
   }, []);
 
   return (
-    <Card className="w-[80%] mx-auto my-8 bg-white/5 ">
+    <Card className="w-[80%] max-sm:w-[95%] mx-auto my-8 bg-white/5 ">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar isBordered radius="full" size="md" src={post.author.image || ""}/>
@@ -59,8 +59,7 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
           </div>
         </div>
         <Button
-          className={`${isFollowed ? "bg-transparent text-foreground border-default-200" : ""}`}
-          isDisabled={user.friends.map((friend) => friend.friend._id).includes(post.author._id)}
+          className={`${isFollowed ? "bg-transparent text-foreground border-default-200" : ""} ${user._id === post.author._id || user.friends.map((friend) => friend.friend._id).includes(post.author._id) ? "hidden" : ""}`}
           color="primary"
           radius="full"
           size="sm"

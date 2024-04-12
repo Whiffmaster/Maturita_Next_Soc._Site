@@ -8,6 +8,7 @@ export interface Users {
   name: string;
   email: string;
   image: string;
+  password?: string;
   following: mongoose.Schema.Types.ObjectId[] | Users[] | [];
   followers: mongoose.Schema.Types.ObjectId[] | Users[] | [];
   friends: {
@@ -42,6 +43,9 @@ const UserSchema = new mongoose.Schema<Users>({
     required: true,
     unique: true,
     maxLength: 20,
+  },
+  password: {
+    type: String,
   },
   email: {
     type: String,

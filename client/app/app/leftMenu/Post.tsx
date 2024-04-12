@@ -1,6 +1,6 @@
 "use client"
 import {useEffect, useState} from "react";
-import {Button, Switch, Textarea} from "@nextui-org/react";
+import {Button, ButtonGroup, Switch, Textarea} from "@nextui-org/react";
 import {toast} from "sonner";
 import {sentPost} from "../../actions";
 import {useSession} from "next-auth/react";
@@ -42,21 +42,19 @@ const Post = () => {
   }
 
   return (
-    <div className={"w-full h-fit mx-auto self-center flex flex-col"}>
+    <div className={"w-full max-sm:w-[90%] max-sm:py-5 h-fit mx-auto self-center flex flex-col"}>
       <Textarea
-        className={"w-full text-white h-fit mb-10"}
+        className={"w-full  text-white h-fit mb-10"}
         variant="bordered"
         size={"lg"}
         placeholder="There is always something to say" value={content} maxLength={350} minLength={30}
         onValueChange={setContent}/>
 
       <div className={"flex flex-row w-full justify-around"}>
-        <div className={"w-[140px] flex self-center h-fit"}>
-          <Switch className={"transition mx-auto "} color={isPublic ? "success" : "default"} isSelected={(isPublic === "public")}
-                  onValueChange={(e) => setIsPublic(e ? "public" : "friends")}>
-            {isPublic == "public" ? "Public" : "Friends"}
-          </Switch>
-        </div>
+        <ButtonGroup>
+          <Button onClick={()=>setIsPublic("friends")} className={isPublic=="friends"? "bg-grad":"bg-white/10"}>Friends</Button>
+          <Button onClick={()=>setIsPublic("public")} className={isPublic=="public"? "bg-grad":"bg-white/10"}>Public</Button>
+        </ButtonGroup>
         <Button variant={"ghost"} className={"bg-grad border-none transition font-bold rounded-full drop-shadow-lg"}
                 onClick={post}>Post</Button>
       </div>

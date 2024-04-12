@@ -25,7 +25,7 @@ const messageSchema = new mongoose.Schema<Messages>({
   },
   date: {
     type: String,
-    default: Date.UTC(Date.now()).toString(),
+    default: undefined,
   }
 });
 

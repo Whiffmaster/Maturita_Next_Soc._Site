@@ -1,13 +1,13 @@
 import React, {Suspense} from "react";
 import Page from "./page";
-import Loading from "./loading";
 import HomePage from "./page";
 import {FeedContext} from "../utils/FeedContext";
 import {UserContext} from "../utils/UserContext";
 import {IoContext} from "../utils/IoContext";
+import {ChatContext} from "../utils/ChatContext";
 
 export default function Layout({children}: { children: React.ReactNode; }) {
-  return <section>
+  return <section className={"overflow-hidden overscroll-none absolute"}>
     <Contexts>
       <HomePage/>
     </Contexts>
@@ -19,7 +19,9 @@ const Contexts = ({children}: { children: React.ReactNode }) => {
     <UserContext>
       <FeedContext>
         <IoContext>
+          <ChatContext>
           {children}
+          </ChatContext>
         </IoContext>
       </FeedContext>
     </UserContext>
