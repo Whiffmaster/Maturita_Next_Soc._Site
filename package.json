@@ -8,7 +8,9 @@
     "node": "cd backend && nodemon index.ts",
     "dev": "concurrently \"npm run node\" \"npm run next dev\"",
     "build": "cd client && next build",
-    "start": "concurrently \" cd backend && npm run node\" \"cd client && next start -p 3000\""
+    "startMono": "concurrently \" cd backend && npm run node\" \"cd client && next start -p 3000\"",
+    "startNext": "cd client && next start -p 3000",
+    "startNode": "cd backend && nodemon index.ts"
   },
   "keywords": [],
   "author": "Whiff",
