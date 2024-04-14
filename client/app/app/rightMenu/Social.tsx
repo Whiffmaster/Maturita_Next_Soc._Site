@@ -1,7 +1,15 @@
 "use client"
 import {RiEmotionSadFill} from "react-icons/ri";
 import {useUserContext} from "../../utils/UserContext";
-import {Avatar, AvatarIcon, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger} from "@nextui-org/react";
+import {
+  Avatar,
+  AvatarIcon,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger, Popover, PopoverContent,
+  PopoverTrigger
+} from "@nextui-org/react";
 import React from "react";
 import {useChatContext} from "../../utils/ChatContext";
 import {getConversation, removeFriend} from "../../actions";
@@ -9,6 +17,7 @@ import {ObjectId} from "mongoose";
 import {HiOutlineDotsHorizontal} from "react-icons/hi";
 import {Users} from "../../../models/User";
 import {useIoContext} from "../../utils/IoContext";
+import {RxCross2} from "react-icons/rx";
 
 const Social = ({icon, activeFriends}: { icon: any, activeFriends: string[] }) => {
   const {user, setUser} = useUserContext()
@@ -17,6 +26,7 @@ const Social = ({icon, activeFriends}: { icon: any, activeFriends: string[] }) =
 
   const addChat = (conversation) => {
     if (activeChats.find((chat) => chat._id == conversation._id)) {
+      console.log("load chat")
       setTopChat(conversation._id)
     } else {
       getConversation(conversation).then((res) => {
@@ -26,10 +36,10 @@ const Social = ({icon, activeFriends}: { icon: any, activeFriends: string[] }) =
       })
     }
   }
-const deleteFriend = (friendID) => {
+  const deleteFriend = (friendID) => {
     removeFriend(friendID).then((res) => {
       if (res) {
-        setUser({...user, friends: user.friends.filter((f:{friend:Users}) => f.friend._id != friendID)})
+        setUser({...user, friends: user.friends.filter((f: { friend: Users }) => f.friend._id != friendID)})
         socket.emit("userEvent", {
           type: "FRIEND_DELETE",
           data: {
@@ -51,9 +61,10 @@ const deleteFriend = (friendID) => {
                  onClick={() =>
                    addChat(friend.conversation)
                  }
-                 className="flex w-[80%] self-center cursor-pointer pt-10 rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md">
+                 className="flex w-[80%] max-sm:w-[60%] self-center cursor-pointer mt-5 rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md">
               <Avatar
                 icon={<AvatarIcon/>}
+                isBordered
                 src={friendData.image || ""}
                 color={activeFriends.find((id) => id == friend.friend._id) ? "success" : "default"}
                 classNames={{
@@ -61,17 +72,21 @@ const deleteFriend = (friendID) => {
                   icon: "text-black/70"
                 }}
               />
-              <h2 className=" w-[50%] font-semibold  self-center">{friendData.name}</h2>
-              <Dropdown>
-                <DropdownTrigger>
-                  <HiOutlineDotsHorizontal/>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Dynamic Actions" >
-                  <DropdownItem key="Delete friend" className="text-danger" color="danger" onClick={()=>deleteFriend(friendData._id)}>
+              <h2 className=" w-[70%] text-center font-semibold  self-center">{friendData.name}</h2>
+              <Popover placement={"left"} className={"w-full"}>
+                <PopoverTrigger>
+                  <div className={"w-10%"}>
+                    <HiOutlineDotsHorizontal/>
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <div className="text-danger p-2" color="danger"
+                       onClick={() => deleteFriend(friendData._id)}>
                     Delete friend
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
+
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           )
         }) :

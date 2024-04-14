@@ -9,11 +9,13 @@ import User from "../../../../models/User";
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 import {adapter} from "next/dist/server/web/adapter";
+import {sendMail} from "../../../utils/nodemailer";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
+      emailVerified: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -43,9 +45,11 @@ const handler = NextAuth({
       if (user) {
         token.id = user.id;
       }
-      //TODO: Send email
-      //await Email.sendRegistrationMail((data.token.email || data.profile?.email || data.user?.email)!);
-
+      if(user && !user.emailVerified){
+        await sendMail(user.email, "Welcome to the site", "Welcome to the site").then((r) => {
+          console.log(r)
+        })
+      }
 
       return token;
     },
@@ -58,15 +62,16 @@ const handler = NextAuth({
       },
       authorize: async (credentials) => {
         await mongoose.connect(process.env.MONGODB_URI);
-        const user = await User.findOne({email: credentials.email});
+        const user = await User.findOne({email: credentials.email}).exec();
         if (user) {
           const isMatch = await bcrypt.compare(credentials.password, user.password);
           if (isMatch) {
-            const userSession = {id: user._id.toString(), name: user.name, email: user.email, image: user.image}
+            const userSession = {id: user._id.toString(), name: user.name, email: user.email, image: user.image, emailVerified:user.emailVerified}
+            console.log(userSession)
             return userSession
           }
         }
-        return null
+        throw new Error("Invalid credentials");
       },
     }),
     Discord({

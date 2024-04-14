@@ -20,16 +20,14 @@ import {Posts} from "../../../models/Post";
 import {IoIosHeart} from "react-icons/io";
 import {ObjectId} from "mongoose";
 import {FaRegHeart} from "react-icons/fa";
-import {createComment, dislikePost, likeComment, likePost} from "../../actions";
+import {createComment, dislikePost, handleFollow, likeComment, likePost, updateMemory} from "../../actions";
 import {Shanti} from "next/dist/compiled/@next/font/dist/google";
 import CommentPopover from "./CommentPopover";
+import {log} from "next/dist/server/typescript/utils";
 
 export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: any, setFeed: any }) => {
-  let likesAmount = post && post.likes ? post.likes.length : 0
-  let shareAmount = post && post.reposts ? post.reposts.length : 0
-  let commentsAmount = post && post.comments ? post.comments.length : 0
   const {user, setUser} = useUserContext()
-  const [isFollowed, setIsFollowed] = useState<boolean>(user.following.map((friend) => friend.friend._id).includes(post.author._id) || user.friends.map((friend) => friend.friend._id).includes(post.author._id))
+  const [isFollowed, setIsFollowed] = useState<boolean>((user.following as ObjectId[]).includes(post.author._id) || user.friends.map((friend) => friend.friend._id).includes(post.author._id))
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
   const handleLike = () => {
@@ -44,13 +42,48 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
 
     }
   }
+  const HashtagText = () => {
+    let text = post.content
+    const segments = text.split(/(\s+)/).map(segment =>
+      segment.includes('#') ?
+        segment.split(/(#[\w]+)/).map(part =>
+          part.startsWith('#') ?
+            <Link className={"cursor-pointer"} onClick={()=>{
+              updateMemory(part)
+              setActive("Search")
+            }} key={part}>
+              {part}
+            </Link> : part
+        ) : segment
+    );
+
+    return <p>{segments}</p>;
+  };
+
+  const handleFollowAction = (targetID: ObjectId, userID: ObjectId, follow: boolean) => {
+    if (follow) {
+      setUser({
+        ...user,
+        following: [...user.following, targetID]
+      })
+    } else {
+      setUser({
+        ...user,
+        following: user.following.filter((follower) => follower !== targetID)
+      })
+    }
+    handleFollow(follow, userID, targetID).then((res) => {
+        console.log(res)
+      }
+    )
+  }
 
   useEffect(() => {
     console.log(user.friends.map((friend) => friend.friend._id).includes(post.author._id))
   }, []);
 
   return (
-    <Card className="w-[80%] max-sm:w-[95%] mx-auto my-8 bg-white/5 ">
+    <Card className="w-[80%] max-sm:w-[95%] mx-auto my-4 bg-white/5 ">
       <CardHeader className="justify-between">
         <div className="flex gap-5">
           <Avatar isBordered radius="full" size="md" src={post.author.image || ""}/>
@@ -64,14 +97,17 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
           radius="full"
           size="sm"
           variant={isFollowed ? "bordered" : "solid"}
-          onPress={() => setIsFollowed(!isFollowed)}
+          onClick={() => {
+            setIsFollowed(!isFollowed)
+            handleFollowAction(post.author._id, user._id, !isFollowed)
+          }}
         >
           {isFollowed ? "Unfollow" : "Follow"}
         </Button>
       </CardHeader>
       <CardBody className="px-3 py-0 text-small text-default-400">
         <ScrollShadow className={"max-h-[200px]"}>
-          <p>{post.content}</p>
+          {HashtagText()}
         </ScrollShadow>
       </CardBody>
       <CardFooter className="gap-3">

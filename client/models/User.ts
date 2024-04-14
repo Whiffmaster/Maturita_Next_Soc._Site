@@ -7,10 +7,11 @@ export interface Users {
   _id: ObjectId;
   name: string;
   email: string;
+  emailVerified: boolean;
   image: string;
   password?: string;
-  following: mongoose.Schema.Types.ObjectId[] | Users[] | [];
-  followers: mongoose.Schema.Types.ObjectId[] | Users[] | [];
+  following: mongoose.Schema.Types.ObjectId[] | [];
+  followers: mongoose.Schema.Types.ObjectId[] | [];
   friends: {
     friend: mongoose.Schema.Types.ObjectId | Users,
     conversation: mongoose.Schema.Types.ObjectId | Conversations,
@@ -43,6 +44,10 @@ const UserSchema = new mongoose.Schema<Users>({
     required: true,
     unique: true,
     maxLength: 20,
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
   },
   password: {
     type: String,
@@ -111,6 +116,24 @@ const UserSchema = new mongoose.Schema<Users>({
     default: [],
   },
 });
+
+UserSchema.post('save', function(error, doc, next) {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    const customError = parseMongoError(error);
+    next(new Error(customError));
+  } else {
+    next();
+  }
+});
+
+function parseMongoError(error) {
+  if (error.code === 11000) {
+    // Extract the field name from the error message
+    const field = error.message.split("index: ")[1].split(" dup key")[0].split("_")[0];
+    return `${field.charAt(0).toUpperCase() + field.slice(1)} already used.`;
+  }
+  return "An unexpected error occurred.";
+}
 
 
 export default mongoose.models.User || mongoose.model<Users>("User", UserSchema);

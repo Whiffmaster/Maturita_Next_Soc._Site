@@ -6,6 +6,11 @@ const nextConfig = {
         MONGODB_URI: "mongodb+srv://Whiffmaster:MVngsAWnAFFGCSma@cluster0.pvkvq1u.mongodb.net/Mat",
         NEXTAUTH_URL: "http://localhost:3000",
         NEXTAUTH_SECRET: "FUCKINGDICKEDIHOPEUDIE",
+        MAIL_HOST:"tuesday.mxrouting.net",
+        MAIL_PORT:"587",
+        MAIL_ENCRYPTION:"tls",
+        MAIL_USERNAME:"chat@waifuu.com",
+        MAIL_PASSWORD:"17861177"
     },
     experimental: {
         esmExternals: "loose",

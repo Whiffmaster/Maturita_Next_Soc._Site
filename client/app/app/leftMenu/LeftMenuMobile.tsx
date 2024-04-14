@@ -18,7 +18,7 @@ const LeftMenuMobile = (props: {
 
   return (
     <div
-      className="relative sm:hidden w-full h-[60px] items-center gap-1 self-center justify-around flex flex-row border-t border-t-white/60 text-white">
+      className="relative sm:hidden w-full h-[60px] items-center gap-1 self-center justify-around flex bottom-0 flex-row border-t border-t-white/60 text-white">
 
       {props.active && Array.from(props.routes.values()).map((child) => {
           if (!child.icon) return undefined

@@ -1,15 +1,11 @@
 "use client"
 import {Button, Card, Divider, Input, Link, Table} from "@nextui-org/react";
-import {white} from "next/dist/lib/picocolors";
 import React, {useEffect, useState} from "react";
-import {FaArrowLeftLong} from "react-icons/fa6";
 import {FaDiscord} from "react-icons/fa";
 import {getProviders, signIn, signOut, useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
-import {log} from "next/dist/server/typescript/utils";
-import User from "../../../models/User";
 import {register} from "../../actions";
-import bcrypt from "bcrypt";
+import {toast} from "sonner";
 
 const signin = () => {
   const [active, setActive] = useState(null);
@@ -34,11 +30,16 @@ const signin = () => {
 
         <Button className={"bg-white text-black font-bold text-xl hover:bg-opacity-80"}
                 onClick={() => signIn("credentials", {
+                    redirect: false,
                     callbackUrl: "/app",
                     email: email,
                     password: password
                   }
-                ).catch((reason) => log(reason))}>Log In</Button>
+                ).then((r) => {
+                  if (r?.error) {
+                    toast.error(r.error, {})
+                  }
+                })}>Log In</Button>
       </>)
   }
   const Register = () => {
@@ -47,23 +48,31 @@ const signin = () => {
     const [username, setUsername] = useState("");
     return (
       <>
-        <Input type="email" label="Email" maxLength={25} minLength={4} variant="bordered" value={email}
+        <Input type="email" label="Email" maxLength={35} variant="bordered" value={email}
                onValueChange={(e) => setEmail(e)}/>
-        <Input type="text" label="Username" maxLength={12} variant="bordered" className={""} value={username}
+        <Input type="text" label="Username" maxLength={20} variant="bordered" className={""} value={username}
                onValueChange={(e) => setUsername(e)}/>
-        <Input type="password" label="Password" maxLength={50} minLength={8} variant="bordered" value={password}
+        <Input type="password" label="Password" maxLength={50} variant="bordered" value={password}
                onValueChange={(e) => setPassword(e)}/>
         <Button className={"bg-white text-black font-bold text-xl hover:bg-opacity-80"} onClick={() => {
           register(username, email, password).then((res) => {
             console.log(res)
             if (res) {
+              if (res.status == "error") {
+                toast.error(res.message, {})
+                return
+              }
               signIn("credentials", {
+                redirect: false,
                 callbackUrl: "/app",
                 email: email,
                 password: password
               }).catch((reason) => console.log(reason))
             }
-          }).catch((reason) => console.log(reason))
+          }).catch((reason) => {
+            console.log(reason)
+
+          })
         }}>Register</Button>
       </>)
   }

@@ -1,3 +1,4 @@
+"use client"
 import React, {useState} from "react";
 import {useUserContext} from "../../utils/UserContext";
 import {acceptInvite, searchUser, sentInvite} from "../../actions";
@@ -19,6 +20,7 @@ import {ObjectId} from "mongoose";
 import {MdDone} from "react-icons/md";
 import {VscError} from "react-icons/vsc";
 import {useIoContext} from "../../utils/IoContext";
+import {HiOutlineDotsHorizontal} from "react-icons/hi";
 
 
 const AddFriends = ({icon}: { icon: any }) => {
@@ -85,7 +87,7 @@ const AddFriends = ({icon}: { icon: any }) => {
 
             return (
               <div key={userInv._id}
-                   className="flex bg-white/10 rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md w-[80%] self-center">
+                   className="flex rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md w-[80%] self-center">
                 <Avatar
                   icon={<AvatarIcon/>}
                   src={userInv.image || ""}
@@ -96,7 +98,7 @@ const AddFriends = ({icon}: { icon: any }) => {
                 />
                 <h2 className="w-[50%] mx-auto font-semibold text-center self-center">{userInv.name}</h2>
                 <BsPersonFillAdd
-                  className={`mx-auto rounded-md self-center w-[40px] h-[40px] hover:bg-black/20 p-2 ${disabled ? "hidden" : ""}`}
+                  className={`mx-auto rounded-md self-center w-[40px] h-[40px] cursor-pointer hover:bg-black/20 p-2 ${disabled ? "hidden" : ""}`}
                   color={"purple"}
                   onClick={() => handleSentInvite(userInv._id)}/>
               </div>
@@ -108,32 +110,38 @@ const AddFriends = ({icon}: { icon: any }) => {
 
           {user.invites.map((invite) => {
             return (
-              <Popover showArrow placement={"top"} className={"w-full"}>
-                <PopoverTrigger>
-                  <div key={invite._id}
-                       className="flex w-[80%] self-center cursor-pointer bg-white/10 rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md">
-                    <Avatar
-                      icon={<AvatarIcon/>}
-                      src={invite.image || ""}
-                      classNames={{
-                        base: "bg-white/10 mx-auto w-[40px]",
-                        icon: "text-black/70"
-                      }}
-                    />
-                    <h2 className=" w-[50%] font-semibold  self-center">{invite.name}</h2>
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className={"m-0 p-0  bg-black"}>
-                  <ButtonGroup>
-                    <Button className={"bg-black"} variant="light" color={"success"}><MdDone
-                      className={"w-full h-[80%]"} color={"green"} onClick={() => handleInvite(true, invite._id)}/>
-                    </Button>
-                    <Button className={"bg-black"} variant="light" color={"danger"}><VscError
-                      className={"w-full h-[80%]"} color={"red"} onClick={() => handleInvite(false, invite._id)}/>
-                    </Button>
-                  </ButtonGroup>
-                </PopoverContent>
-              </Popover>
+              <div key={invite._id}
+                   className="flex w-[80%] self-center cursor-pointer rounded-md items-center justify-center text-white flex-row h-[50px] shadow-md">
+                <Avatar
+                  icon={<AvatarIcon/>}
+                  src={invite.image || ""}
+                  classNames={{
+                    base: "bg-white/10 mx-auto w-[40px]",
+                    icon: "text-black/70"
+                  }}
+                />
+                <h2 className=" w-[50%] font-semibold  self-center">{invite.name}</h2>
+                  <Popover showArrow placement={"left"} className={"w-full"}>
+                    <PopoverTrigger>
+                      <div>
+                        <HiOutlineDotsHorizontal/>
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverContent className={"w-fit"}>
+                      <div className="text-success rounded hover:bg-white/5 flex flex-row w-[100px] p-1 m-1 justify-center cursor-pointer" color="success"
+                           onClick={() => handleInvite(true, invite._id)}>
+                        <p className={"ml-1"}>Accept </p>
+                        <MdDone className={"my-auto mx-2"}/>
+                      </div>
+                      <div className="text-danger rounded hover:bg-white/5 flex flex-row w-[100px] justify-center p-1 m-1 cursor-pointer" color="danger"
+                           onClick={() => handleInvite(false, invite._id)}>
+                        <p className={"ml-1"}>Reject </p>
+                        <VscError className={"my-auto mx-2"}/>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+              </div>
+
             )
           })}
         </>

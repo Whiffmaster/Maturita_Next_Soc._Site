@@ -1,6 +1,6 @@
 "use server"
 
-import {ObjectId} from "mongoose";
+import {MongooseError, ObjectId} from "mongoose";
 import {cookies} from "next/headers";
 import User, {Users} from "../models/User";
 import Post, {Posts} from "../models/Post";
@@ -8,14 +8,18 @@ import Conversation from "../models/Conversation";
 import Comment from "../models/Comment";
 import Message from "../models/Message";
 import bcrypt from "bcrypt";
+import {MongoServerError} from "mongodb";
 
-const getFeed = async (_id: ObjectId | string) => {
+const getFeed = async (_id: ObjectId | string, shown: ObjectId[] = []) => {
   const user = await User.findById(_id).populate("friends.friend", "name image").populate("friends.conversation").exec()
   if (user) {
     const friends = user.friends.map((friend) => friend.friend._id)
+    const allUsers = user.following.concat(friends)
     const posts = await Post.find({
-      author: {$in: [user.following, friends]}
-    }).populate("author", "name image following followers")
+      _id:{$nin: shown},
+      author: {$in: allUsers, $nin:_id}
+    }).limit(20)
+      .populate("author", "name image following followers")
       .populate({
         path: "comments",
         populate: {
@@ -32,6 +36,9 @@ const getFeed = async (_id: ObjectId | string) => {
 }
 const searchPostsByUsername = async (amount: number, searchString: string) => {
   const user = await User.findOne({name: {$regex: searchString}}).exec()
+  if (!user) {
+    return []
+  }
   const posts = await Post.find({author: user._id}).limit(amount).populate("author", "name image following followers")
     .populate({
       path: "comments",
@@ -81,14 +88,12 @@ const getUser = async (id: string): Promise<Users> => {
   throw new Error("User not found")
 }
 
-const updateMemory = async (val: string) => {
-  const memory = await getMemory()
-  memory && memory.length > 0 ? cookies().set("memory", JSON.stringify([...memory, val])) :
-    cookies().set("memory", JSON.stringify([val]))
+const updateMemory = async (val?: string) => {
+  cookies().set("memory", val)
   return {status: "ok", message: "Memory updated"}
 }
-const getMemory = async (): Promise<[] | string[]> => {
-  return cookies().get("memory") ? JSON.parse(cookies().get("memory")!.value) : []
+const getMemory = async () => {
+  return cookies().get("memory") ? cookies().get("memory")!.value : undefined
 }
 
 const searchUser = async (searchString: string, userID: string) => {
@@ -136,11 +141,13 @@ const sentInvite = async (inviteeID: string, userID: string) => {
 
 const register = async (username: string, email: string, password: string) => {
   const hashedPassword = await bcrypt.hash(password, 10)
-  const user = await User.create({name: username, email, password:hashedPassword})
-  if (user) {
+  try {
+    const user = new User({name: username, email, password: hashedPassword})
+    await user.save()
     return {status: "ok", message: "User created"}
+  } catch (e) {
+    return {status: "error", message: e.message}
   }
-  throw new Error("User not created")
 }
 const likePost = async (postID: ObjectId, userID: ObjectId) => {
   const post = await Post.findById(postID)
@@ -255,27 +262,49 @@ const removeFriend = async (friendID: string) => {
 
 }
 
+const handleFollow = async (follow: boolean, userID: ObjectId, followID: ObjectId) => {
+  const user = await User.findById(userID).exec()
+  const target = await User.findById(followID).exec()
+  if (user && target) {
+    if (follow) {
+      user.following.push(followID)
+      target.followers.push(userID)
+      await user.save()
+      await target.save()
+      return {status: "ok", message: "Followed"}
+    } else {
+      user.following = user.following.filter((f) => f != followID)
+      target.followers = target.followers.filter((f) => f != userID)
+      await user.save()
+      await target.save()
+      return {status: "ok", message: "Unfollowed"}
 
-export {
-  removeFriend,
-  unlikeComment,
-  updateSettings,
-  sendMessage,
-  getActiveFriends,
-  getFeed,
-  searchPostsByTag,
-  searchPostsByUsername,
-  sentPost,
-  updateMemory,
-  getMemory,
-  getUser,
-  searchUser,
-  acceptInvite,
-  sentInvite,
-  register,
-  likePost,
-  dislikePost,
-  createComment,
-  likeComment,
-  getConversation
+    }
+  }
 }
+
+
+  export {
+  handleFollow,
+    removeFriend,
+    unlikeComment,
+    updateSettings,
+    sendMessage,
+    getActiveFriends,
+    getFeed,
+    searchPostsByTag,
+    searchPostsByUsername,
+    sentPost,
+    updateMemory,
+    getMemory,
+    getUser,
+    searchUser,
+    acceptInvite,
+    sentInvite,
+    register,
+    likePost,
+    dislikePost,
+    createComment,
+    likeComment,
+    getConversation
+  }

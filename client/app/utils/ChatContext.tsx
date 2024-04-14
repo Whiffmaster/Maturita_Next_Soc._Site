@@ -123,11 +123,11 @@ export const ChatContext = ({children}: { children: ReactNode }) => {
               <CardHeader>
                   <div className={"absolute left-[42%] top-0 bg-white/5 w-[60px] h-[25px] cursor-pointer rounded-b"}
                        onClick={() => setTopChat(topChat? undefined: activeChats[0]._id)}><FaArrowDown className={`mx-auto my-1 ${!topChat && "rotate-180"}`}/></div>
-                  <Tabs variant={"underlined"}>
+                  <Tabs variant={"underlined"} selectedKey={topChat} onSelectionChange={(key: React.Key) =>setTopChat(key as string)}>
                     {topChat && activeChats.map((chat) => {
                       const friend = (chat.members as Users[]).find((u) => u._id != user._id)
                       return (
-                        <Tab key={chat._id} title={friend.name}/>
+                        <Tab key={chat._id} title={friend.name} onClick={()=>setTopChat(chat._id)}/>
                       )
                     })}
                   </Tabs>

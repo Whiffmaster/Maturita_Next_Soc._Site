@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@auth/mongodb-adapter':
     specifier: ^2.5.0
-    version: 2.5.0(mongodb@6.4.0)
+    version: 2.5.0(mongodb@6.4.0)(nodemailer@6.9.13)
   '@nextui-org/react':
     specifier: ^2.2.10
     version: 2.2.10(@types/react@18.2.63)(framer-motion@11.0.8)(react-dom@18.2.0)(react@18.2.0)(tailwind-variants@0.2.0)(tailwindcss@3.4.1)
@@ -52,7 +52,10 @@ dependencies:
     version: 14.1.2(react-dom@18.2.0)(react@18.2.0)
   next-auth:
     specifier: ^4.24.6
-    version: 4.24.6(next@14.1.2)(react-dom@18.2.0)(react@18.2.0)
+    version: 4.24.6(next@14.1.2)(nodemailer@6.9.13)(react-dom@18.2.0)(react@18.2.0)
+  nodemailer:
+    specifier: ^6.9.13
+    version: 6.9.13
   nodemon:
     specifier: ^3.1.0
     version: 3.1.0
@@ -85,6 +88,9 @@ devDependencies:
   '@types/node':
     specifier: ^20
     version: 20.11.24
+  '@types/nodemailer':
+    specifier: ^6.4.14
+    version: 6.4.14
   '@types/react':
     specifier: ^18
     version: 18.2.63
@@ -121,7 +127,7 @@ packages:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
 
-  /@auth/core@0.28.0:
+  /@auth/core@0.28.0(nodemailer@6.9.13):
     resolution: {integrity: sha512-/fh/tb/L4NMSYcyPoo4Imn8vN6MskcVfgESF8/ndgtI4fhD/7u7i5fTVzWgNRZ4ebIEGHNDbWFRxaTu1NtQgvA==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
@@ -139,17 +145,18 @@ packages:
       '@types/cookie': 0.6.0
       cookie: 0.6.0
       jose: 5.2.2
+      nodemailer: 6.9.13
       oauth4webapi: 2.10.3
       preact: 10.11.3
       preact-render-to-string: 5.2.3(preact@10.11.3)
     dev: false
 
-  /@auth/mongodb-adapter@2.5.0(mongodb@6.4.0):
+  /@auth/mongodb-adapter@2.5.0(mongodb@6.4.0)(nodemailer@6.9.13):
     resolution: {integrity: sha512-9d5g1O+Cv+zDq4PtxsuIZNzMXpWM6Wx2T/5czFyQx3o7GzQXPl/WQoSqcKoWCj8LnmMEQitBS85/IZw6BHKY0Q==}
     peerDependencies:
       mongodb: ^6
     dependencies:
-      '@auth/core': 0.28.0
+      '@auth/core': 0.28.0(nodemailer@6.9.13)
       mongodb: 6.4.0
     transitivePeerDependencies:
       - '@simplewebauthn/browser'
@@ -2786,6 +2793,12 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
+  /@types/nodemailer@6.4.14:
+    resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
+    dependencies:
+      '@types/node': 20.11.24
+    dev: true
+
   /@types/prop-types@15.7.11:
     resolution: {integrity: sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==}
 
@@ -5087,7 +5100,7 @@ packages:
     engines: {node: '>= 0.6'}
     dev: false
 
-  /next-auth@4.24.6(next@14.1.2)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.6(next@14.1.2)(nodemailer@6.9.13)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-djQt3ZEaWEIxcsuh3HTW2uuzLfXMRjHH+ugAsichlQSbH4iA5MRcgMA2HvTNvsDTDLh44tyU72+/gWsxgTbAKg==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
@@ -5103,6 +5116,7 @@ packages:
       cookie: 0.5.0
       jose: 4.15.4
       next: 14.1.2(react-dom@18.2.0)(react@18.2.0)
+      nodemailer: 6.9.13
       oauth: 0.9.15
       openid-client: 5.6.4
       preact: 10.19.6
@@ -5170,6 +5184,11 @@ packages:
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: true
+
+  /nodemailer@6.9.13:
+    resolution: {integrity: sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nodemon@3.1.0:
     resolution: {integrity: sha512-xqlktYlDMCepBJd43ZQhjWwMw2obW/JRvkrLxq5RCNcuDDX1DbcPT+qT1IlIIdf+DhnWs90JpTMe+Y5KxOchvA==}

@@ -3,6 +3,7 @@ import {ObjectId} from "mongodb";
 import React from "react";
 import {Conversations} from "../../models/Conversation";
 import {Messages} from "../../models/Message";
+import {toast} from "sonner";
 
 const handleEvent = ({type, data}: { type: string, data: any }, setUser: any, setActiveFriends: any, setChat:any) => {
 
@@ -30,6 +31,7 @@ const handleEvent = ({type, data}: { type: string, data: any }, setUser: any, se
         invites: [...prev.invites, data]
       }
     })
+    toast.success("New friend request")
   }
 
   const handleFriendRequestAccepted = () => {

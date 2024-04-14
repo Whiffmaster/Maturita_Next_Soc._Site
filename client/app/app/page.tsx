@@ -25,7 +25,8 @@ import LeftMenuMobile from "./leftMenu/LeftMenuMobile";
 import MobileNav from "./navigations/MobileNav";
 import Loading from "./loading";
 import MobileSocial from "./social/MobileSocial";
-export default function HomePage()  {
+
+export default function HomePage() {
   const {status, data} = useSession({
     required: true,
 
@@ -37,6 +38,7 @@ export default function HomePage()  {
   const {setActiveChats} = useChatContext()
   const {socket, setSocket} = useIoContext()
   const [activeFriends, setActiveFriends] = useState<string[]>([])
+  const [isMobile, setIsMobile] = useState<boolean>(false)
 
   const routes = new Map<string, { component: JSX.Element, icon?: JSX.Element }>([
     ["Feed", {component: <Feed key={"Feed"} setActive={setActive}/>, icon: <AiFillHome/>}],
@@ -47,10 +49,19 @@ export default function HomePage()  {
     ["Post", {component: <Post key={"Post"}/>, icon: <MdAddComment/>}],
     ["Settings", {component: <Settings key={"Settings"}/>}]
   ])
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640)
+
+    window.addEventListener("resize", () => {
+      setIsMobile(window.innerWidth < 640)
+    })
+  }, []);
+
   useEffect(() => {
     if (!data) return
     getUser(data?.user?.id).then((res) => {
-      console.log()
+      console.log(res)
       setUser(res)
       getActiveFriends(res.friends.map(i => i.friend._id)).then((res) => {
         console.log(res)
@@ -78,10 +89,15 @@ export default function HomePage()  {
   return (
     <div className="h-screen w-screen flex max-sm:flex-col self-center justify-between">
       <LeftMenu active={active} setActive={setActive} routes={routes}/>
-      <MobileNav active={active}/>
-      <MobileSocial/>
+      {isMobile && <MobileNav active={active}/>}
+      {isMobile &&
+          <MobileSocial activeFriends={activeFriends}>
+              <Social key={"Friends"} icon={<BsFillPeopleFill/>} activeFriends={activeFriends}/>
+              <AddFriends key={"Add Friends"} icon={<BsPersonFillAdd/>}/>
+          </MobileSocial>}
 
-      <div className="relative h-4/5 w-[50vw] max-sm:w-full mx-auto flex flex-col self-center overflow-hidden">
+      <div
+        className="relative max-sm:h-full h-4/5 w-[50vw] max-sm:w-full mx-auto flex flex-col self-center overflow-hidden">
         {routes.get(active || "Feed").component}
       </div>
       <LeftMenuMobile active={active} setActive={setActive} routes={routes}/>
