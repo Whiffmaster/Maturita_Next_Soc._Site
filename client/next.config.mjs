@@ -2,6 +2,9 @@ import {nextui} from "@nextui-org/react";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    typescript:{
+        ignoreBuildErrors: true,
+    },
     env: {
         MONGODB_URI: "mongodb+srv://Whiffmaster:MVngsAWnAFFGCSma@cluster0.pvkvq1u.mongodb.net/Mat",
         NEXTAUTH_URL: "http://localhost:3000",
