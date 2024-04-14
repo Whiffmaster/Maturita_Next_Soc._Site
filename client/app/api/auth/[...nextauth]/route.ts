@@ -45,6 +45,7 @@ const handler = NextAuth({
       if (user) {
         token.id = user.id;
       }
+      //@ts-ignore
       if(user && !user.emailVerified){
         await sendMail(user.email, "Welcome to the site", "Welcome to the site").then((r) => {
           console.log(r)

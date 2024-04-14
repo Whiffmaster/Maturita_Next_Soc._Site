@@ -28,6 +28,10 @@ export interface Users {
   } | undefined;
 }
 
+interface UserDocument extends Users, mongoose.Document {
+  _id: ObjectId;
+}
+
 const PrivacySchema = new mongoose.Schema<Users["settings"]["privacy"]>({
   posts: {
     type: String,
@@ -38,7 +42,7 @@ const PrivacySchema = new mongoose.Schema<Users["settings"]["privacy"]>({
     enum: ["public", "private", "friends"],
   },
 });
-const UserSchema = new mongoose.Schema<Users>({
+const UserSchema = new mongoose.Schema<UserDocument>({
   name: {
     type: String,
     required: true,
@@ -128,7 +132,6 @@ UserSchema.post('save', function(error, doc, next) {
 
 function parseMongoError(error) {
   if (error.code === 11000) {
-    // Extract the field name from the error message
     const field = error.message.split("index: ")[1].split(" dup key")[0].split("_")[0];
     return `${field.charAt(0).toUpperCase() + field.slice(1)} already used.`;
   }
