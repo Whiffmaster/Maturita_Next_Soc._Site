@@ -1,6 +1,5 @@
 import {Users} from "../../models/User";
 import {ObjectId} from "mongodb";
-import React from "react";
 import {Conversations} from "../../models/Conversation";
 import {Messages} from "../../models/Message";
 import {toast} from "sonner";

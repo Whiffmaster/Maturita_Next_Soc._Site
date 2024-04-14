@@ -1,17 +1,10 @@
 "use client"
 import {Badge, Card} from "@nextui-org/react";
 import React, {JSX, useEffect, useState} from "react";
-import Social from "../rightMenu/Social";
-import {BsFillPeopleFill, BsPersonFillAdd} from "react-icons/bs";
-import AddFriends from "../rightMenu/AddFriends";
-import RightMenu from "../rightMenu/RightMenu";
-import {ObjectId} from "mongoose";
 import {IoIosArrowBack} from "react-icons/io";
-import addFriends from "../rightMenu/AddFriends";
 import {useUserContext} from "../../utils/UserContext";
 import {useChatContext} from "../../utils/ChatContext";
 import MobileChat from "./MobileChat";
-import {Conversations} from "../../../models/Conversation";
 import {Users} from "../../../models/User";
 
 

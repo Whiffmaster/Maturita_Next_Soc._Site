@@ -1,7 +1,5 @@
 "use client"
 
-import {useUserContext} from "../../utils/UserContext";
-
 const MobileNav = ({active}:{active:string}) => {
     return (
         <div className={"sm:hidden flex flex-row w-full h-[50px] bottom-0 justify-between"}>

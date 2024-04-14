@@ -3,20 +3,15 @@ import React, {useState} from "react";
 import {useUserContext} from "../../utils/UserContext";
 import {acceptInvite, searchUser, sentInvite} from "../../actions";
 import {useSession} from "next-auth/react";
-import {Users} from "../../../models/User";
 import {
   Avatar,
   AvatarIcon,
-  Button,
-  ButtonGroup,
   Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Skeleton
 } from "@nextui-org/react";
 import {BsPersonFillAdd} from "react-icons/bs";
-import {ObjectId} from "mongoose";
 import {MdDone} from "react-icons/md";
 import {VscError} from "react-icons/vsc";
 import {useIoContext} from "../../utils/IoContext";

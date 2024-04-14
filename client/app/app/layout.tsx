@@ -1,5 +1,4 @@
 import React, {Suspense} from "react";
-import Page from "./page";
 import HomePage from "./page";
 import {FeedContext} from "../utils/FeedContext";
 import {UserContext} from "../utils/UserContext";

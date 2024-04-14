@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 import {register} from "../../actions";
 import {toast} from "sonner";
 
-const signin = () => {
+const Signin = () => {
   const [active, setActive] = useState(null);
   const {status} = useSession();
   const router = useRouter();
@@ -107,6 +107,6 @@ const signin = () => {
   );
 }
 
-export default signin;
+export default Signin;
 
 

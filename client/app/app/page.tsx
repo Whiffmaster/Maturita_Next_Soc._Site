@@ -2,13 +2,11 @@
 import React, {startTransition, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 import {signOut, useSession} from "next-auth/react";
-import {Badge, Button, Divider} from "@nextui-org/react";
 import RightMenu from "./rightMenu/RightMenu";
 import Social from "./rightMenu/Social";
 import {BsFillPeopleFill, BsPersonFillAdd, BsSearch} from "react-icons/bs";
 import {Feed} from "./feed/Feed";
 import Search from "./leftMenu/Search";
-import AddPost from "./leftMenu/Post";
 import {MdAddComment} from "react-icons/md";
 import {AiFillHome} from "react-icons/ai";
 import LeftMenu from "./leftMenu/LeftMenu";

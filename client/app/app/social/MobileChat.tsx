@@ -4,7 +4,6 @@ import {Users} from "../../../models/User";
 import {sendMessage} from "../../actions";
 import {Button, Input, ScrollShadow} from "@nextui-org/react";
 import {useIoContext} from "../../utils/IoContext";
-import {Conversations} from "../../../models/Conversation";
 import {IoMdSend} from "react-icons/io";
 import {useChatContext} from "../../utils/ChatContext";
 

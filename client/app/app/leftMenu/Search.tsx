@@ -1,13 +1,10 @@
 "use client"
 import React, {useEffect, useState} from "react";
-import {FaHashtag, FaUserCircle} from "react-icons/fa";
 import {Button, Input, ScrollShadow} from "@nextui-org/react";
-import {useFeedContext} from "../../utils/FeedContext";
 import {getMemory, searchPostsByTag, searchPostsByUsername, updateMemory} from "../../actions";
 import {toast} from "sonner";
-import Post, {Posts} from "../../../models/Post";
+import {Posts} from "../../../models/Post";
 import {FeedPost} from "../feed/FeedPost";
-import {BsSearch} from "react-icons/bs";
 
 
 const SearchContent = (props: { setActive: any, search: string, setSearch: any }) => {

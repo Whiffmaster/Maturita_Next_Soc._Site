@@ -4,8 +4,6 @@ import {Conversations} from "../../models/Conversation";
 import {Card, CardBody, CardHeader, Divider, Input, ScrollShadow, Tab, Tabs} from "@nextui-org/react";
 import {Users} from "../../models/User";
 import {useUserContext} from "./UserContext";
-import {ObjectId} from "mongoose";
-import {Messages} from "../../models/Message";
 import {useIoContext} from "./IoContext";
 import {sendMessage} from "../actions";
 import {FaArrowDown} from "react-icons/fa";

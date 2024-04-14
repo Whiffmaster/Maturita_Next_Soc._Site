@@ -1,7 +1,7 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useUserContext} from "../../utils/UserContext";
 import {Users} from "../../../models/User";
-import {Button, Card, CardBody, Divider, Input, Select, SelectItem} from "@nextui-org/react";
+import {Button,Input, Select, SelectItem} from "@nextui-org/react";
 import {updateSettings} from "../../actions";
 
 const Settings = () => {

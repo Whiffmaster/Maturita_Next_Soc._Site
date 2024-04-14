@@ -1,7 +1,6 @@
 "use client"
 
 
-import {useFeedContext} from "../../utils/FeedContext";
 import React, {useEffect, useState} from "react";
 import {
   Avatar,
@@ -9,21 +8,16 @@ import {
   Card,
   CardBody,
   CardFooter,
-  CardHeader, Input,
+  CardHeader,
   Link,
-  Modal, ModalBody,
-  ModalContent, ModalFooter, ModalHeader,
-  ScrollShadow, Textarea, useDisclosure
+  ScrollShadow, useDisclosure
 } from "@nextui-org/react";
 import {useUserContext} from "../../utils/UserContext";
 import {Posts} from "../../../models/Post";
-import {IoIosHeart} from "react-icons/io";
 import {ObjectId} from "mongoose";
 import {FaRegHeart} from "react-icons/fa";
 import {createComment, dislikePost, handleFollow, likeComment, likePost, updateMemory} from "../../actions";
-import {Shanti} from "next/dist/compiled/@next/font/dist/google";
 import CommentPopover from "./CommentPopover";
-import {log} from "next/dist/server/typescript/utils";
 
 export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: any, setFeed: any }) => {
   const {user, setUser} = useUserContext()

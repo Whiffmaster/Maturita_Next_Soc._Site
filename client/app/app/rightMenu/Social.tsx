@@ -4,10 +4,7 @@ import {useUserContext} from "../../utils/UserContext";
 import {
   Avatar,
   AvatarIcon,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger, Popover, PopoverContent,
+  Popover, PopoverContent,
   PopoverTrigger
 } from "@nextui-org/react";
 import React from "react";

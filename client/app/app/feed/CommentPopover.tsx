@@ -13,8 +13,6 @@ import React, {useEffect, useState} from "react";
 import {useUserContext} from "../../utils/UserContext";
 import {createComment, likeComment, unlikeComment} from "../../actions";
 import {Posts} from "../../../models/Post";
-import {ObjectId} from "mongoose";
-import {Comments} from "../../../models/Comment";
 
 const CommentPopover = ({isOpen, onOpenChange, post, setFeed}) => {
   const {user, setUser} = useUserContext()

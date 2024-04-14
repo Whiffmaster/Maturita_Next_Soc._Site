@@ -1,5 +1,4 @@
 "use client"
-import {useRouter} from "next/navigation";
 import {useUserContext} from "../../utils/UserContext";
 import {CgLogOut} from "react-icons/cg";
 import {signOut, useSession} from "next-auth/react";

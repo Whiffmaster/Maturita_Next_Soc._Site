@@ -1,7 +1,6 @@
 "use client"
 import React, {createContext, ReactNode, useContext, useState} from "react";
 import {Users} from "../../models/User";
-import {DummyPost} from "./FeedContext";
 
 
 interface UserContextValue {
