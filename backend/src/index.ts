@@ -12,8 +12,6 @@ io.on('connection', (socket) => {
 
   socket.on("convEvent", conv.handleEvent);
   socket.on("userEvent", user.handleEvent);
-
-
 })
 
 setInterval(() => {
