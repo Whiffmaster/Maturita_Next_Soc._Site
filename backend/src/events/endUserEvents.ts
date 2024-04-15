@@ -30,12 +30,10 @@ export const handleEvent = async (req: { type: string, data: object }) => {
         return;
     }
   } catch (e) {
-    console.log(e)
   }
 }
 
 const handleMessageSend = async (data: object) => {
-  console.log("MESSAGE SEND", data)
   const {userID, targetID, message, date, conversationID, messageID} = data as {
     userID: string,
     targetID: string,

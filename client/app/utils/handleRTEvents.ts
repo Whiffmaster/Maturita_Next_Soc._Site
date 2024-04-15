@@ -87,7 +87,6 @@ const handleEvent = ({type, data}: { type: string, data: any }, setUser: any, se
     })
   }
 
-  console.log(type, data)
   switch (type) {
     case "USER_ONLINE":
       return handleUserOnline();

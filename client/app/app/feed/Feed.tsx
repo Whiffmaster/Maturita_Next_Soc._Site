@@ -30,7 +30,6 @@ export const Feed = ({setActive}: { setActive: any }) => {
     if (feed[0]._id as undefined as number == -1) {
       getFeed(data.user.id).then((r: Posts[]) => {
         if (r.length == 0) return
-        console.log(r)
         setFeed(r)
       })
     }

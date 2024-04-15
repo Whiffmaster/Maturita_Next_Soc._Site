@@ -28,7 +28,6 @@ const SearchContent = (props: { setActive: any, search: string, setSearch: any }
     if (val.includes("#")) {
       searchPostsByTag(20, val)
         .then(r => {
-          console.log(r)
           if (r.length > 0) setSearchFeed(r)
           else toast.error("No results found")
         }).catch(e => {
@@ -37,7 +36,6 @@ const SearchContent = (props: { setActive: any, search: string, setSearch: any }
     } else {
       searchPostsByUsername(20, val)
         .then(r => {
-          console.log(r)
           if (r.length > 0) setSearchFeed(r)
           else toast.error("No results found")
         }).catch(e => {

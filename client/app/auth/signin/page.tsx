@@ -56,7 +56,6 @@ const Signin = () => {
                onValueChange={(e) => setPassword(e)}/>
         <Button className={"bg-white text-black font-bold text-xl hover:bg-opacity-80"} onClick={() => {
           register(username, email, password).then((res) => {
-            console.log(res)
             if (res) {
               if (res.status == "error") {
                 toast.error(res.message, {})

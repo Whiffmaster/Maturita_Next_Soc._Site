@@ -23,11 +23,9 @@ const Social = ({icon, activeFriends}: { icon: any, activeFriends: string[] }) =
 
   const addChat = (conversation) => {
     if (activeChats.find((chat) => chat._id == conversation._id)) {
-      console.log("load chat")
       setTopChat(conversation._id)
     } else {
       getConversation(conversation).then((res) => {
-        console.log(res)
         setTopChat(conversation._id)
         setActiveChats([...activeChats, res])
       })

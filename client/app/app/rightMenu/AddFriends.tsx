@@ -32,7 +32,6 @@ const AddFriends = ({icon}: { icon: any }) => {
     if (str.length <= 3 || str.length >= 15) return setSearchResults([])
     searchUser(str, data.user.id).then((res) => {
       setSearchResults(res)
-      console.log(res)
     }).catch((e) => {
       setSearchResults([])
     })

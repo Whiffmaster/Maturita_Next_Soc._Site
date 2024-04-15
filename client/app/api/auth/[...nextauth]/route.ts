@@ -70,7 +70,6 @@ const handler = NextAuth({
           const isMatch = await bcrypt.compare(credentials.password, user.password);
           if (isMatch) {
             const userSession = {id: user._id.toString(), name: user.name, email: user.email, image: user.image, emailVerified:user.emailVerified}
-            console.log(userSession)
             return userSession
           }
         }

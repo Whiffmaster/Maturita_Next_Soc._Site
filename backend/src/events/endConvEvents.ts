@@ -1,5 +1,4 @@
 export const handleEvent = (type: string, payload: object) => {
-    console.log(type, payload)
     switch (type) {
         case "CONV_UPDATED":
         return handleConvUpdated(payload);

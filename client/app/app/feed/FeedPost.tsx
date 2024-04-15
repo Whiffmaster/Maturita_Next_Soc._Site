@@ -26,11 +26,9 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
 
   const handleLike = () => {
     if ((user.likes as ObjectId[]).includes(post._id)) {
-      console.log("unlike")
       setUser({...user, likes: user.likes.filter((id) => id !== post._id)})
       dislikePost(post._id, user._id)
     } else {
-      console.log("like")
       setUser({...user, likes: [...user.likes, post._id]})
       likePost(post._id, user._id)
 
@@ -71,10 +69,6 @@ export const FeedPost = ({post, setActive, setFeed}: { post: Posts, setActive: a
       }
     )
   }
-
-  useEffect(() => {
-    console.log(user.friends.map((friend) => friend.friend._id).includes(post.author._id))
-  }, []);
 
   return (
     <Card className="w-[80%] max-sm:w-[95%] mx-auto my-4 bg-white/5 ">

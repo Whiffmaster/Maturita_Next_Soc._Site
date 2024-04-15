@@ -59,16 +59,13 @@ export default function HomePage() {
   useEffect(() => {
     if (!data) return
     getUser(data?.user?.id).then((res) => {
-      console.log(res)
       setUser(res)
       getActiveFriends(res.friends.map(i => i.friend._id)).then((res) => {
-        console.log(res)
         setActiveFriends(res)
       })
-      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"uppity-pig.railway.internal:5000", {auth: {userID: data?.user?.id}}))
+      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"127.0.0.1:5000", {auth: {userID: data?.user?.id}}))
       console.log("listening to: "+ process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL)
     }).catch((err) => {
-      console.log(err)
       signOut()
       router.replace("/auth/signin")
     })

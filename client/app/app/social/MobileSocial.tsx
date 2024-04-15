@@ -14,7 +14,6 @@ const MobileSocial = ({activeFriends, children}: { activeFriends: string[], chil
   const [rolled, setRolled] = useState<boolean>(false)
   const {activeChats, setActiveChats, topChat, setTopChat} = useChatContext()
   useEffect(() => {
-    console.log(topChat)
     if (!topChat) return
     let AC = activeChats.find((chat) => chat._id == topChat)
     if (!AC) return

@@ -19,12 +19,6 @@ const CommentPopover = ({isOpen, onOpenChange, post, setFeed}) => {
   const [commentContent, setCommentContent] = useState<string>("")
   const [comments, setComments] = useState([])
 
-
-  useEffect(() => {
-    console.log(post.comments)
-  }, [post.comments]);
-
-
   const sentComment = () => {
     createComment(commentContent, user._id, post._id).then((res) => {
       setCommentContent("")

@@ -15,7 +15,6 @@ const Post = () => {
 
   useEffect(() => {
     setIsPublic(user.settings.privacy.posts)
-    console.log()
   }, []);
 
   const post = () => {
@@ -24,7 +23,6 @@ const Post = () => {
     matches ? matches.map(tag => tag.substring(1)) : [];
     sentPost(user._id, content, matches, isPublic).then(
       (res) => {
-        console.log(res)
         setContent("")
         toast.success("Post sent")
       }
