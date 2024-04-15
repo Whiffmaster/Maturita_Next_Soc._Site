@@ -63,7 +63,7 @@ export default function HomePage() {
       getActiveFriends(res.friends.map(i => i.friend._id)).then((res) => {
         setActiveFriends(res)
       })
-      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"roundhouse.proxy.rlwy.net:12496", {auth: {userID: data?.user?.id}}))
+      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"uppity-pig.railway.internal", {auth: {userID: data?.user?.id}}))
       console.log("listening to: "+ process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL)
     }).catch((err) => {
       signOut()
