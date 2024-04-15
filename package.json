@@ -8,7 +8,7 @@
     "node": "cd backend && nodemon index.ts",
     "dev": "concurrently \"npm run node\" \"npm run next dev\"",
     "build": "cd client && next build",
-    "startMono": "concurrently \" cd backend && npm run node\" \"cd client && next start -p 3000\"",
+    "start": "concurrently \" cd backend && npm run node\" \"cd client && next start\"",
     "start:client": "cd client && next start -p 3000",
     "start:backend": "cd backend && nodemon index.ts"
   },
