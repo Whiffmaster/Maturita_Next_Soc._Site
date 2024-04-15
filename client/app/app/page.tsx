@@ -65,7 +65,7 @@ export default function HomePage() {
         console.log(res)
         setActiveFriends(res)
       })
-      setSocket(io("http://localhost:5000", {auth: {userID: data?.user?.id}}))
+      setSocket(io(process.env.REACT_APP_SOCKET_URL, {auth: {userID: data?.user?.id}}))
     }).catch((err) => {
       console.log(err)
       signOut()

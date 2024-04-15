@@ -6,7 +6,8 @@ const nextConfig = {
         ignoreBuildErrors: true,
     },
     env: {
-        MONGODB_URI: "mongodb+srv://Whiffmaster:MVngsAWnAFFGCSma@cluster0.pvkvq1u.mongodb.net/Mat",
+        REACT_APP_SOCKET_URL:"http://localhost:5000",
+MONGODB_URI: "mongodb+srv://Whiffmaster:MVngsAWnAFFGCSma@cluster0.pvkvq1u.mongodb.net/Mat",
         NEXTAUTH_URL: "http://localhost:3000",
         NEXTAUTH_SECRET: "FUCKINGDICKEDIHOPEUDIE",
         MAIL_HOST:"tuesday.mxrouting.net",
