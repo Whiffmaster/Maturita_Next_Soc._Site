@@ -7,14 +7,12 @@ import cors from "cors";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors({
-  origin: "*"
-}))
+app.use(cors())
 const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "*"
+    origin: "maturita-production.up.railway.app"
   }
 })
 
