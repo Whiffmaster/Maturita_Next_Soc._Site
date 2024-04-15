@@ -65,7 +65,7 @@ export default function HomePage() {
         console.log(res)
         setActiveFriends(res)
       })
-      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"uppity-pig.railway.internal", {auth: {userID: data?.user?.id}}))
+      setSocket(io(process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL ||"uppity-pig.railway.internal:5000", {auth: {userID: data?.user?.id}}))
       console.log("listening to: "+ process.env.NEXT_PUBLIC_REACT_APP_SOCKET_URL)
     }).catch((err) => {
       console.log(err)
