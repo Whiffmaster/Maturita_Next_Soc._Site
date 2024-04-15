@@ -10,7 +10,7 @@
     "build:client": "cd client && next build",
     "start": "concurrently \" cd backend && npm run node\" \"cd client && next start\"",
     "start:client": "cd client && next start",
-    "start:backend": "cd backend && nodemon index.ts"
+    "start:backend": "cd backend && nodemon index.ts -p 5000"
   },
   "keywords": [],
   "author": "Whiff",
