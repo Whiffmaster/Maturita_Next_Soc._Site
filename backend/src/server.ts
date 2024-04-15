@@ -8,16 +8,14 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-  origin: "127.0.0.1",
-  methods: ["GET", "POST"],
+  origin:'http://localhost:3000',
   credentials: true
 }));
 const server = createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "127.0.0.1",
-    methods: ["GET", "POST"],
+    origin:'http://localhost:3000',
     credentials: true
   }
 })
